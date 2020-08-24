@@ -10,7 +10,7 @@ const authors = [
     name: 'Mark Twain',
     imageUrl: 'images/authors/marktwain.jpg',
     imageSource: 'Wikimedia Commons',
-    books: ['The Adventures of Huckleberry Finn', 'Life on the Mississippi']
+    books: ['The Adventures of Huckleberry Finn']
   },
   {
     name: 'Joseph Conrad',
@@ -46,6 +46,10 @@ const authors = [
   }
 ];
 
+function render() {
+  ReactDOM.render(<AuthorQuiz {...state} onAnswerSelected={onAnswerSelected} />, document.getElementById('root'));
+}
+
 function getTurnData(authors) {
   const allBooks = authors.reduce(function (p, c, i) {
       return p.concat(c.books);
@@ -62,17 +66,16 @@ function getTurnData(authors) {
 }
 
 const state = {
-  turnData: getTurnData(authors)
+  turnData: getTurnData(authors),
+  highlight: ''
 };
 
-
-ReactDOM.render(
-  <React.StrictMode>
-    <AuthorQuiz {...state} />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
-
+function onAnswerSelected(answer) {
+  const isCorrect = state.turnData.author.books.some((book) => book === answer);
+  state.highlight = isCorrect ? 'correct' : 'wrong';
+  render();
+}
+render();
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
